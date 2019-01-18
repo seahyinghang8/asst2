@@ -47,7 +47,8 @@ Also modify `ChatState.addMessage()` to be thread-safe. Note that `addMessage()`
 
 When blocking a thread for any reason, do not use `Thread.sleep()`, as this degrades responsiveness and is considered a poor concurrency practice. Instead use `Object.wait()` or another similar method to make the thread block properly. 
 
-## Functional Correctness (50 points) ##
+## Grading ##
+### Functional Correctness (50 points) ###
 
 Since the performance of the chat server is limited by network I/O, this assignment will be graded only on correctness. We will test your application with a number of concurrent sessions by opening several browser tabs, typing into each one, and making sure the chat room behaves correctly.
 
@@ -61,7 +62,7 @@ Example functional correctness problems we’re looking for include:
       
 Note that when testing your chat server, we will never test with more than 8 simultaneous connections.
 
-## Concurrency and Thread-Safety (50 points) ##
+### Concurrency and Thread-Safety (50 points) ###
 
 Additionally, we will manually audit your code to evaluate your use of synchronization primitives and verify the thread-safety of your algorithms and implementation. Example concurrency problems we’re looking for include: 
 
