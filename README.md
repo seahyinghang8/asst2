@@ -55,11 +55,17 @@ This assignment can be run locally. But first, make sure that Java (at least ver
 
 Now, to compile your code, run javac with a list of all source files. One way is:  
     
-    `find . -name '*.java' -print0 | xargs -0 javac`
+    find . -name '*.java' -print0 | xargs -0 javac
 
 To run the chat server, invoke __java__ with the base directory in which the compiled code lives (the current directory "." if you just ran `javac`) and the ChatServer class: 
   
-    `java –cp . ChatServer`
+    java –cp . ChatServer
+    
+By default, running `java –cp . ChatServer` will open a server socket on port 8080. The DNS name localhost is bound by convention to a loopback interface on the local machine, so you can get to the chat page world by navigating a browser to
+
+    http://localhost:8080/world/	
+
+
 
 ## Grading ##
 
