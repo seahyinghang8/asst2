@@ -77,6 +77,10 @@ If you aren’t compiling and running ChatServer locally, then you can use SSH p
     
 This instructs SSH to forward all connections made to port 8080 on the local machine to the address 127.0.0.1 and port 8080 on the remote machine. You can then navigate to http://localhost:8080/world/ on your local machine and be transparently connected to the remote ChatServer instance. 
 
+## Tips on Threading and Synchronization ##
+
+FIXME 
+
 ## Grading ##
 
 
