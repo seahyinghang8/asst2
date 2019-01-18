@@ -65,7 +65,9 @@ By default, running `java –cp . ChatServer` will open a server socket on port 
 
     http://localhost:8080/world/	
 
+### Working Remotely Through SSH ###
 
+FIXME 
 
 ## Grading ##
 
