@@ -31,9 +31,9 @@ __ChatState.java__ – Holds the shared mutable state of a chat room. The state 
 
 ## Your Task ##
 
-Modify `ChatServer.java` so that it contains a thread pool of 8 threads.  Incoming requests should be handed off to one of the threads in the thread pool to be handled. Add locks or implement concurrent data structures as required to make the chat server thread-safe; there should be no spin-waiting anywhere in your implementation. You are permitted to use ONLY the locking primitives we have discussed in class, specifically: 
+Modify `ChatServer.java` so that it contains a thread pool of 8 threads.  Incoming requests should be handed off to one of the threads in the thread pool to be handled. Add locks or implement concurrent data structures as required to make the chat server thread-safe; there should be no spin-waiting anywhere in your implementation. You are permitted to use __ONLY__ the following locking primitives, specifically: 
 
-- the `synchronized` and `volatile` keywords
+- the `synchronized` keywords
 - relevant methods of `java.lang.Object` (i.e. `wait()`, `notify()`, and `notifyAll()`) 
 - `java.util.concurrent.Semaphore` 
 - `java.util.concurrent.locks.Lock` as implemented by `java.util.concurrent.locks.ReentrantLock`
