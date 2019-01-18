@@ -46,3 +46,30 @@ Modify `ChatState.java` to be thread-safe. The `ChatState.recentMessages()` meth
 Also modify `ChatState.addMessage()` to be thread-safe. Note that `addMessage()` is responsible for waking any blocked calls to `recentMessages()` so that they can return the newly posted messages. 
 
 When blocking a thread for any reason, do not use `Thread.sleep()`, as this degrades responsiveness and is considered a poor concurrency practice. Instead use `Object.wait()` or another similar method to make the thread block properly. 
+
+## Functional Correctness (50 points) ##
+
+Since the performance of the chat server is limited by network I/O, this assignment will be graded only on correctness. We will test your application with a number of concurrent sessions by opening several browser tabs, typing into each one, and making sure the chat room behaves correctly.
+
+Please note that we will never test your chat server with more than 8 simultaneous connections, but that even with more than 8 simultaneous connections, the server must never drop any connections and should eventually respond to all requests (perhaps with poor performance).
+
+Example functional correctness problems we’re looking for include: 
+  - Protocol errors
+      - Early empty responses
+      o Responses that don’t include the latest data
+      o Room contents in a different order for different clients 
+      
+Note that when testing your chat server, we will never test with more than 8 simultaneous connections.
+
+## Concurrency and Thread-Safety (50 points) ##
+
+Additionally, we will manually audit your code to evaluate your use of synchronization primitives and verify the thread-safety of your algorithms and implementation. Example concurrency problems we’re looking for include: 
+
+- Generic concurrency problems 
+  o Unprotected access to mutable data o Incorrect protection 
+  o (Potential) deadlocks o Missed wakeups 
+  
+- Poor concurrency practices 
+  o Busy-waiting (a.k.a. spin-waiting)
+  o Use of Thread.sleep() 
+  o Locks held during I/O 
