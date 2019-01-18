@@ -39,10 +39,10 @@ Modify `ChatServer.java` so that it contains a thread pool of 8 threads.  Incomi
 - `java.util.concurrent.locks.Lock` as implemented by `java.util.concurrent.locks.ReentrantLock`
 - `java.util.concurrent.locks.Condition` resulting from calls to `Lock.newCondition()` 
 
-Do NOT use any high-level concurrent data structures such as Java’s Concurrent Collections classes, or anything else in `java.util.concurrent` not listed above. 
+Do *NOT* use any high-level concurrent data structures such as Java’s Concurrent Collections classes, or anything else in `java.util.concurrent` not listed above. 
 
-Modify `ChatState.java` to be thread-safe. The ChatState.recentMessages() method should NOT call Thread.sleep() and should instead use a proper synchronization method such as Object.wait() to wait up to 15 seconds for new messages to arrive before returning. Note that recentMessages() should return as soon as new messages arrive; it should not always wait the full 15 seconds as in the starter code. 
+Modify `ChatState.java` to be thread-safe. The `ChatState.recentMessages()` method should *NOT* call Thread.sleep() and should instead use a proper synchronization method such as `Object.wait()` to wait up to 15 seconds for new messages to arrive before returning. Note that recentMessages() should return as soon as new messages arrive; it should not always wait the full 15 seconds as in the starter code. 
 
-Also modify ChatState.addMessage() to be thread-safe. Note that addMessage() is responsible for waking any blocked calls to recentMessages() so that they can return the newly posted messages. 
+Also modify `ChatState.addMessage()` to be thread-safe. Note that `addMessage()` is responsible for waking any blocked calls to `recentMessages()` so that they can return the newly posted messages. 
 
-When blocking a thread for any reason, do not use Thread.sleep(), as this degrades responsiveness and is considered a poor concurrency practice. Instead use Object.wait() or another similar method to make the thread block properly. 
+When blocking a thread for any reason, do not use `Thread.sleep()`, as this degrades responsiveness and is considered a poor concurrency practice. Instead use `Object.wait()` or another similar method to make the thread block properly. 
