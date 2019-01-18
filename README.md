@@ -53,6 +53,7 @@ When blocking a thread for any reason, do not use `Thread.sleep()`, as this degr
 
 By convention, web browsers only permit 6 simultaneous connections to a single server. Therefore, the chat server will not behave properly if you attempt to open more than 6 tabs in the same browser. To test with more than six connections, either open multiple browsers, or use multiple browser sessions (e.g. by using the `firefox -P <profile>` command-line parameter). That said, historically few students have encountered bugs with 8 connections that were not already apparent with 6
 
+
 ## Environment Setup and Compiling ##
 
 This assignment can be run locally. But first, make sure that Java (at least version 8) is installed. You can follow instructions here: https://www.java.com/en/download/. 
