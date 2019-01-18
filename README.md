@@ -73,3 +73,11 @@ Additionally, we will manually audit your code to evaluate your use of synchroni
   - Busy-waiting (a.k.a. spin-waiting)
   - Use of Thread.sleep() 
   - Locks held during I/O 
+  
+## Hand-In Instructions ## 
+
+FIXME 
+
+## Resources and Notes ##
+
+FIXME
