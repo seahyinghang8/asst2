@@ -31,16 +31,17 @@ __ChatState.java__ – Holds the shared mutable state of a chat room. The state 
 
 ## Your Task ##
 
-Modify ChatServer.java so that it contains a thread pool of 8 threads.  Incoming requests should be handed off to one of the threads in the thread pool to be handled. Add locks or implement concurrent data structures as required to make the chat server thread-safe; there should be no spin-waiting anywhere in your implementation. You are permitted to use ONLY the locking primitives we have discussed in class, specifically: 
+Modify `ChatServer.java` so that it contains a thread pool of 8 threads.  Incoming requests should be handed off to one of the threads in the thread pool to be handled. Add locks or implement concurrent data structures as required to make the chat server thread-safe; there should be no spin-waiting anywhere in your implementation. You are permitted to use ONLY the locking primitives we have discussed in class, specifically: 
 
-- the synchronized and volatile keywords
-- relevant methods of java.lang.Object (i.e. wait(), notify(), and notifyAll()) 
-- java.util.concurrent.Semaphore 
-- java.util.concurrent.locks.Lock as implemented by java.util.concurrent.locks.ReentrantLock • java.util.concurrent.locks.Condition resulting from calls to Lock.newCondition() 
+- the `synchronized` and `volatile` keywords
+- relevant methods of `java.lang.Object` (i.e. `wait()`, `notify()`, and `notifyAll()`) 
+- `java.util.concurrent.Semaphore` 
+- `java.util.concurrent.locks.Lock` as implemented by `java.util.concurrent.locks.ReentrantLock`
+- `java.util.concurrent.locks.Condition` resulting from calls to `Lock.newCondition()` 
 
-Do NOT use any high-level concurrent data structures such as Java’s Concurrent Collections classes, or anything else in java.util.concurrent not listed above. 
+Do NOT use any high-level concurrent data structures such as Java’s Concurrent Collections classes, or anything else in `java.util.concurrent` not listed above. 
 
-Modify ChatState.java to be thread-safe. The ChatState.recentMessages() method should NOT call Thread.sleep() and should instead use a proper synchronization method such as Object.wait() to wait up to 15 seconds for new messages to arrive before returning. Note that recentMessages() should return as soon as new messages arrive; it should not always wait the full 15 seconds as in the starter code. 
+Modify `ChatState.java` to be thread-safe. The ChatState.recentMessages() method should NOT call Thread.sleep() and should instead use a proper synchronization method such as Object.wait() to wait up to 15 seconds for new messages to arrive before returning. Note that recentMessages() should return as soon as new messages arrive; it should not always wait the full 15 seconds as in the starter code. 
 
 Also modify ChatState.addMessage() to be thread-safe. Note that addMessage() is responsible for waking any blocked calls to recentMessages() so that they can return the newly posted messages. 
 
