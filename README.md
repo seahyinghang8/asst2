@@ -47,7 +47,13 @@ Also modify `ChatState.addMessage()` to be thread-safe. Note that `addMessage()`
 
 When blocking a thread for any reason, do not use `Thread.sleep()`, as this degrades responsiveness and is considered a poor concurrency practice. Instead use `Object.wait()` or another similar method to make the thread block properly. 
 
+## Environment Setup And Compiling ##
+
+This assignment can be run locally
+
 ## Grading ##
+
+
 ### Functional Correctness (50 points) ###
 
 Since the performance of the chat server is limited by network I/O, this assignment will be graded only on correctness. We will test your application with a number of concurrent sessions by opening several browser tabs, typing into each one, and making sure the chat room behaves correctly.
@@ -68,7 +74,8 @@ Additionally, we will manually audit your code to evaluate your use of synchroni
 
 - Generic concurrency problems 
   - Unprotected access to mutable data o Incorrect protection 
-  - (Potential) deadlocks o Missed wakeups 
+  - (Potential) deadlocks 
+  - Missed wakeups 
   
 - Poor concurrency practices 
   - Busy-waiting (a.k.a. spin-waiting)
