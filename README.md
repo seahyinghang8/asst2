@@ -119,7 +119,7 @@ Of course, as is always the case with multithreaded programming, you might run i
         }
     }
      
-and the program spawns the 2 threads. If Thread 1 executes `synchronized(a)` and then Thread 2 executes `synchronized(b)`, then both threads get stuck on the next `synchronized` statement. In other words, they deadlock. 
+and the program spawns the 2 threads. If thread 1 executes `synchronized(a)` and thread 2 executes `synchronized(b)`, then both threads get stuck on the next `synchronized` statement. In other words, they deadlock. 
 
 FIXME (section about monitors, wait, notify)
 
