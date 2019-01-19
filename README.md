@@ -80,10 +80,12 @@ This instructs SSH to forward all connections made to port 8080 on the local mac
 
 ## Tips on Threading and Synchronization ##
 
-Java provides a threading library. In the example below, we show you how to create and spawn threads:
+You will be using Java's threading library in this assignment. In the example below, we show you how to create and spawn threads:
 
     class MyThread extends Thread { 
-        public void run() { …. } 
+        public void run() { 
+            // actual method executed by this thread 
+        } 
     }
     
     Thread thread = new MyThread(); 
@@ -91,7 +93,36 @@ Java provides a threading library. In the example below, we show you how to crea
     // thread executes its run() method concurrently 
     thread.join()
     
+In order to specificy critical regions, you can use the `synchronized` keyword on a Java object. In Java, every object instantiated has a lock associated with it. If multiple threads need to modify the content of a shared Java object, they can do so safely in the following way:
+
+    // sharedObject is some Java object accessible by many threads
+    synchronized(sharedObject) {   // grab lock
     
+        // Critical atomic region
+        // Safely access and modify field values of sharedObject 
+        
+    } // release lock
+
+Of course, as is always the case with multithreaded programming, you might run into serious concurrency bugs if you're not being careful. For example, say we have the following program: 
+    
+    //Thread Function 1
+    synchronized(a) {
+        synchronized(b) {
+            // function body
+        }
+    }
+   
+    //Thread Function 2
+    synchronized(b) {
+        synchronized(a) {
+            // function body
+        }
+    }
+     
+and the program spawns the 2 threads. If Thread 1 executes `synchronized(a)` and then Thread 2 executes `synchronized(b)`, then both threads get stuck on the next `synchronized` statement. In other words, they deadlock. 
+
+FIXME (section about monitors, wait, notify)
+
 ## Grading ##
 
 
