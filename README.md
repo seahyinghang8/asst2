@@ -80,8 +80,18 @@ This instructs SSH to forward all connections made to port 8080 on the local mac
 
 ## Tips on Threading and Synchronization ##
 
-FIXME 
+Java provides a threading library. In the example below, we show you how to create and spawn threads:
 
+    class MyThread extends Thread { 
+        public void run() { …. } 
+    }
+    
+    Thread thread = new MyThread(); 
+    thread.start();  
+    // thread executes its run() method concurrently 
+    thread.join()
+    
+    
 ## Grading ##
 
 
