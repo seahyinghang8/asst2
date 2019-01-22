@@ -39,7 +39,12 @@ When you open `index.html`, you will get the following page:
 
 ## Your Task ##
 
-Modify `ChatServer.java` so that it contains a thread pool of 8 threads.  Incoming requests should be handed off to one of the threads in the thread pool to be handled. Add locks or implement concurrent data structures as required to make the chat server thread-safe; there should be no spin-waiting anywhere in your implementation. You are permitted to use __ONLY__ the following locking primitives, specifically: 
+Modify`ChatServer.java` to handle requests concurrently. For each request, the main thread should accept the request in handle(), and then hand off responsibility for processing the request to one of eight worker threads (you should implement a pool of threads to do this).  Once a request has been given to a thread, the thread will carry out the result of processing to completion (and return results to the client). Your server will need to synchronize threads in two ways:
+
+1. Since multiple worker threads will need to read and write from the shared data structure __stateByName__, you will need to protect access to this data.  
+2. You will need to think about how you wish to communicate work from the main thread (on which `handle()` is called) to the worker threads in the thread pool. In general it's useful to think about requests going into a work queue, with free worker threads picking up the next item in the queue.
+        
+You are permitted to use __ONLY__ the following locking primitives, specifically: 
 
 - the `synchronized` keywords
 - relevant methods of `java.lang.Object` (i.e. `wait()`, `notify()`, and `notifyAll()`) 
