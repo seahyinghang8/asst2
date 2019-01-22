@@ -13,6 +13,7 @@ The chat system we are asking you to implement has a very simple user interface.
 
 Your work on this assignment focuses on the server side of a chat application, so the assignment starter code contains a full implementation of a web-based chat client, written in HTML and JavaScript.  For the curious, the chat client uses [AJAX](https://en.wikipedia.org/wiki/Ajax_(programming)) to make asynchronous requests to your server, and then uses the results from those requests to update the web page.  
 
+
 ## The Protocol ##
 
 Your web server must handle three types of requests: 
@@ -30,6 +31,11 @@ __index.html__ – An HTML page with embedded JavaScript that implements the cli
 __ChatServer.java__ – A very simple HTTP server. This class opens a server socket, accepts incoming connections, extracts the request, and sends a response. This class handles request of type (1) directly, and implements requests (2) and (3) by calling methods in the `ChatState` class. The starter code is single threaded, and you will be expected to make it multithreaded to complete the assignment. 
 
 __ChatState.java__ – Holds the shared mutable state of a chat room. The state consists of the 32 most recent messages, and a 64-bit ID that is used by the protocol to identify which messages have already been seen. The starter code is single threaded, and you are expected to make it multi-threaded to complete the assignment. 
+
+When you open `index.html`, you will get the following page:
+
+
+![Image](pa2.png?raw=true)
 
 ## Your Task ##
 
