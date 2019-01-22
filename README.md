@@ -163,7 +163,7 @@ Additionally, we will manually audit your code to evaluate your use of synchroni
   - Busy-waiting (a.k.a. spin-waiting)
   - Use of Thread.sleep() 
   - Locks held during I/O 
-  - Excessive coarse-grained locking (e.g grabing a global lock on all chat rooms instead of one per chat room)
+  - Excessive coarse-grained locking (e.g grabing a global lock on all chat rooms instead of a lock per chat room)
 
 ## Extra Credit ##
 
