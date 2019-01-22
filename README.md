@@ -84,7 +84,7 @@ By default, running `java –cp . ChatServer` will open a server socket on port 
 
 If you aren’t compiling and running ChatServer locally, then you can use SSH port forwarding to allow your local web browser to connect to a remotely running chat server, despite firewalls. For command line SSH clients, add the parameter `-L 8080:localhost:8080` to the ssh invocation, as in: 
 
-    ssh -L 8080:localhost:8080 cardinal.stanford.edu 
+    ssh -L 8080:localhost:8080 yoursunetid@cardinal.stanford.edu 
     
 This instructs SSH to forward all connections made to port 8080 on the local machine to the address 127.0.0.1 and port 8080 on the remote machine. You can then navigate to http://localhost:8080/world/ on your local machine and be transparently connected to the remote ChatServer instance. 
 
