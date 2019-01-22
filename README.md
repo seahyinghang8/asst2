@@ -68,9 +68,7 @@ By convention, web browsers only permit six simultaneous connections to a single
 
 This assignment can be run locally. But first, make sure that Java (at least version 8) is installed. You can follow instructions here: https://www.java.com/en/download/. 
 
-Now, to compile your code, run javac with a list of all source files. One way is:  
-    
-    find . -name '*.java' -print0 | xargs -0 javac
+In the `src` directory, we've provided you a Makefile. Simply type `make` in your terminal to compile the 2 Java files (both __ChatState__ and __ChatServer__). 
 
 To run the chat server, invoke __java__ with the base directory in which the compiled code lives (the current directory "." if you just ran `javac`) and the ChatServer class: 
   
