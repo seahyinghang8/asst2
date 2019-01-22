@@ -75,10 +75,11 @@ To run the chat server, invoke __java__ with the base directory in which the com
     java –cp . ChatServer
     
 By default, running `java –cp . ChatServer` will open a server socket on port 8080. The DNS name localhost is bound by convention to a loopback interface on the local machine, so you can get to the chat page world by navigating a browser to http://localhost:8080/world/	
+
 Only one process at a time may bind a service to a port, so you can only run one chat server instance at a time. If the port is not available, __ChatServer__ will exit immediately with a `java.net.BindException: Address already in use`. This might happen because an older instance is still running. This might also occur because another student on the same machine is working on the assignment! On *nix you can check if the port is already bound with the netstat command. (The exact output format will vary.) 
 
-        > netstat -na | grep -w 8080 tcp6       
-        0      0 :::8080           :::*               LISTEN 
+        > netstat -na | grep -w 8080       
+        tcp6       0      0 :::8080           :::*               LISTEN 
         
 You can pass an optional parameter to __ChatServer__ to request that it bind to another port:
 
