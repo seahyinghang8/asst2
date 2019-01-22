@@ -4,32 +4,32 @@
 
 **100 points total + 20 extra credit** 
 
-In your second programming assignment, you will write the concurrent server component of a simple web-based AJAX chat system. You will have to spawn threads to handle incoming requests in parallel, use locks to protect access to the shared data structures, and use conditional wait and notify to block asynchronous queries when a new message has arrived.
+In your second programming assignment, you will use Java to implement the erver component of a simple web-based chat system.  You will have to spawn threads to handle incoming requests in parallel, use locks to protect access to the shared data structures, and use synhronization operations like conditional wait and notify to block asynchronous queries when a new message has arrived.
 
 
 ## Overview ##
 
-The chat system you are to implement has a very simple user interface. To visit the chat room R, users navigate to the web page http://host:port/R/. (If no room is specified, users will visit a chat room named DEFAULT.) There they will be presented with a read-only box containing the most recent messages, a text entry field in which they can enter a message, and a Send button. Each time Send is activated, all of the users of the room will immediately see the new message.
+The chat system we are asking you to implement has a very simple user interface.  The system supports multiple chat rooms, so to visit the chat room R, users navigate to the web page http://host:port/R/. (If no room is specified, the system will display the chat room named DEFAULT.) When in a chat room, users will be presented with a read-only box containing the most recent messages, a text entry field in which they can enter a message, and a `Send` button. Each time `Send` is pressed, all of the users of the room will immediately see the new message.
 
-AJAX is a popular mechanism for improving the interactivity of web applications. In its most basic form it consists of using JavaScript to perform asynchronous requests to a server, and then using the results of those requests to directly update a portion of the web page, without reloading it. This assignment focuses on the server side of a chat application, so we have already written the HTML and the JavaScript that implements the client. 
+Your work on this assignment focuses on the server side of a chat application, so the assignment starter code contains a full implementation of a web-based chat client, written in HTML and JavaScript.  For the curious, the chat client uses [AJAX](https://en.wikipedia.org/wiki/Ajax_(programming)) to make asynchronous requests to your server, and then uses the results from those requests to update the web page.  
 
 ## The Protocol ##
 
 Your web server must handle three types of requests: 
 
-1. GET /R/ – The server returns the contents of index.html. 
-2. POST /R/push?msg=M – The server immediately posts the message M to the room R.
-3. POST /R/pull?last=N – The server returns all of the messages from room R that have an ID larger than N. A response consists of one line per message, with each line of the form (id + ": " + text + "\n"). If no messages are immediately available, the response may be delayed up to 15 seconds while the server waits for additional messages to be posted to the chat room.
+1. `GET /R/` – The server returns the contents of `index.html`. 
+2. `POST /R/push?msg=M` – The server immediately posts the message `M` to the room `R`.
+3. `POST /R/pull?last=N` – The server returns all of the messages from room `R` that have an ID larger than `N`. A response consists of one line per message, with each line of the form (id + ": " + text + "\n"). If no messages are immediately available, the response may be delayed up to 15 seconds while the server waits for additional messages to be posted to the chat room.
 
-Rooms are created on demand.
+Chat rooms are created on demand by visiting new urls in the browser.
 
-## What we give you ##
+## What We Give You ##
 
 __index.html__ – An HTML page with embedded JavaScript that implements the client of the chat protocol. We do not expect you to modify this file at all. We’ve tested this page on current versions of Firefox, Internet Explorer, and Chrome. 
 
-__ChatServer.java__ – A very simple HTTP server. This class opens a server socket, accepts incoming connections, extracts the request, and sends a response. This class handles request (1) directly, and implements requests (2) and (3) by calling methods in the ChatState class. The starter code is single threaded, and you will be expected to make it multithreaded to complete the assignment. 
+__ChatServer.java__ – A very simple HTTP server. This class opens a server socket, accepts incoming connections, extracts the request, and sends a response. This class handles request of type (1) directly, and implements requests (2) and (3) by calling methods in the `ChatState` class. The starter code is single threaded, and you will be expected to make it multithreaded to complete the assignment. 
 
-__ChatState.java__ – Holds the shared mutable state of a chat room. The state consists of the 32 most recent messages, and a 64-bit ID that is used by the protocol to identify which messages have already been seen. The starter code is single threaded, and you will be expected to make it multithreaded to complete the assignment. 
+__ChatState.java__ – Holds the shared mutable state of a chat room. The state consists of the 32 most recent messages, and a 64-bit ID that is used by the protocol to identify which messages have already been seen. The starter code is single threaded, and you are expected to make it multi-threaded to complete the assignment. 
 
 ## Your Task ##
 
@@ -51,8 +51,7 @@ When blocking a thread for any reason, do not use `Thread.sleep()`, as this degr
 
 ### Hints ###
 
-By convention, web browsers only permit 6 simultaneous connections to a single server. Therefore, the chat server will not behave properly if you attempt to open more than 6 tabs in the same browser. To test with more than six connections, either open multiple browsers, or use multiple browser sessions (e.g. by using the `firefox -P <profile>` command-line parameter). That said, historically few students have encountered bugs with 8 connections that were not already apparent with 6
-
+By convention, web browsers only permit six simultaneous connections to a single server. Therefore, the chat server will not behave properly if you attempt to open more than six tabs in the same browser. To test with more than six connections, either open multiple browsers, or use multiple browser sessions (e.g. by using the `firefox -P <profile>` command-line parameter). That said, historically few students have encountered bugs with eight connections that were not already apparent with six.
 
 ## Environment Setup and Compiling ##
 
