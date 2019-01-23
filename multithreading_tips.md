@@ -69,6 +69,5 @@ In order to fix the problems above, you will need to use Java's `wait/notify` me
 3. `notifyAll()`:
  - Same semantics as `notify()`, but wakes up all threads in the wait queue
  
-Here's an illustration of how Java monitors work: 
-
+You're going to find these functions really useful for implementing your threadpool!
 
