@@ -48,9 +48,6 @@ You are permitted to use __ONLY__ the following locking primitives, specifically
 
 - the `synchronized` keywords
 - relevant methods of `java.lang.Object` (i.e. `wait()`, `notify()`, and `notifyAll()`) 
-- `java.util.concurrent.Semaphore` 
-- `java.util.concurrent.locks.Lock` as implemented by `java.util.concurrent.locks.ReentrantLock`
-- `java.util.concurrent.locks.Condition` resulting from calls to `Lock.newCondition()` 
 
 Do *NOT* use any high-level concurrent data structures such as Java’s Concurrent Collections classes, or anything else in `java.util.concurrent` not listed above. 
 
@@ -61,6 +58,8 @@ Also modify `ChatState.addMessage()` to be thread-safe. Note that `addMessage()`
 When blocking a thread for any reason, do not use `Thread.sleep()`, as this degrades responsiveness and is considered a poor concurrency practice. Instead use `Object.wait()` or another similar method to make the thread block properly. 
 
 ### Hints ###
+
+To help you get started, you might want to look at the `ChatServer.runForever()` method. This is where the server starts running and accepts requests through a network socket. You might want to put any server setup code to enable multithreading (__hint__: creating threads for a thread pool).
 
 By convention, web browsers only permit six simultaneous connections to a single server. Therefore, the chat server will not behave properly if you attempt to open more than six tabs in the same browser. To test with more than six connections, either open multiple browsers, or use multiple browser sessions (e.g. by using the `firefox -P <profile>` command-line parameter). That said, historically few students have encountered bugs with eight connections that were not already apparent with six.
 
@@ -95,7 +94,7 @@ This instructs SSH to forward all connections made to port 8080 on the local mac
 
 ## Tips on Threading and Synchronization ##
 
-Checkout our handout on how to use Java's multithreading mechanisms at https://github.com/stanford-cs149/asst2/blob/master/multithreading_tips.md
+You will need to learn about basic Java synchronization primitives in this assignment.  To help you get started, we've created a handout (https://github.com/stanford-cs149/asst2/blob/master/multithreading_tips.md) on how to use a few key primitives that you might be interested to use in this assignment: for example, how to create threads, take locks, wait for and notify other threads of events, etc. 
 
 ## Grading ##
 
@@ -136,6 +135,3 @@ You should submit the complete source code for your working solution, as well as
 
 To submit your assignment, zip the whole directory in which your assignment resides (which includes the `index.html` page, your README.txt file and the `src` directory with your solution), and submit it on Canvas. 
 
-## Resources and Notes ##
-
-- Look at our Java multithreading handout
