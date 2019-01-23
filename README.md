@@ -1,8 +1,8 @@
 # Assignment 2: Multithreaded Chat Server
 
-**Due FIXME**
+**Due Fri Feb 1, 5:00 PM**
 
-**100 points total + 20 extra credit** 
+**100 points total** 
 
 In your second programming assignment, you will use Java to implement the erver component of a simple web-based chat system.  You will have to spawn threads to handle incoming requests in parallel, use locks to protect access to the shared data structures, and use synhronization operations like conditional wait and notify to block asynchronous queries when a new message has arrived.
 
@@ -170,14 +170,13 @@ Additionally, we will manually audit your code to evaluate your use of synchroni
   - Locks held during I/O 
   - Excessive coarse-grained locking (e.g grabbing a global lock on all chat rooms instead of a lock per chat room)
 
-## Extra Credit ##
-
-FIXME 
 
 ## Hand-In Instructions ## 
 
-FIXME 
+You should submit the complete source code for your working solution, as well as a brief text file named README.txt (maximum 1 page) with your name and SUNet ID and an explanation of how it works and why it is correct. 
+
+To submit your assignment, zip the whole directory in which your assignment resides (which includes the `index.html` page, your README.txt file and the `src` directory with your solution), and submit it on Canvas. 
 
 ## Resources and Notes ##
 
-FIXME
+- Look at our Java multithreading handout
