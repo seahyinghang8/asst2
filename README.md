@@ -50,7 +50,6 @@ You are permitted to use __ONLY__ the following locking primitives, specifically
 - relevant methods of `java.lang.Object` (i.e. `wait()`, `notify()`, and `notifyAll()`) 
 - `java.util.concurrent.Semaphore` 
 - `java.util.concurrent.locks.Lock` as implemented by `java.util.concurrent.locks.ReentrantLock`
-- `java.util.concurrent.locks.Condition` resulting from calls to `Lock.newCondition()` 
 
 Do *NOT* use any high-level concurrent data structures such as Java’s Concurrent Collections classes, or anything else in `java.util.concurrent` not listed above. 
 
