@@ -53,11 +53,16 @@ public class ChatServer {
         this.port = port;
     }
 
+    /**
+     * Starts the server. You want to add any multithreading server
+     * startup code here.  
+     */
     public void runForever() throws IOException {
         @SuppressWarnings("resource")
-		final ServerSocket server = new ServerSocket(port);
+	final ServerSocket server = new ServerSocket(port);
         while (true) {
             final Socket connection = server.accept();
+
             handle(connection);
         }
     }
@@ -69,6 +74,10 @@ public class ChatServer {
     	return room;
     }
 
+    /**
+     * Handles a request from the client. This method already parses HTTP
+     * requests and calls the corresponding ChatState methods for you. 
+     */
     private void handle(final Socket connection) throws IOException {
         try {
             final BufferedReader xi
@@ -76,7 +85,7 @@ public class ChatServer {
             final OutputStream xo = new BufferedOutputStream(connection.getOutputStream());
 
             final String request = xi.readLine();
-            System.out.println(Thread.currentThread() + ": " + request);
+            System.out.println("Got a request from a chat client for " + Thread.currentThread() + ": " + request);
 
             Matcher m;
             if (request == null) {
