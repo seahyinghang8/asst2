@@ -59,6 +59,8 @@ When blocking a thread for any reason, do not use `Thread.sleep()`, as this degr
 
 ### Hints ###
 
+To help you get started, you might want to look at the `ChatServer.runForever()` method. This is where the server starts running and accepts requests through a network socket. You might want to put any server setup code to enable multithreading (__hint__: creating threads for a thread pool).
+
 By convention, web browsers only permit six simultaneous connections to a single server. Therefore, the chat server will not behave properly if you attempt to open more than six tabs in the same browser. To test with more than six connections, either open multiple browsers, or use multiple browser sessions (e.g. by using the `firefox -P <profile>` command-line parameter). That said, historically few students have encountered bugs with eight connections that were not already apparent with six.
 
 ## Environment Setup and Compiling ##
