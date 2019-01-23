@@ -1,8 +1,8 @@
 # Assignment 2: Multithreaded Chat Server
 
-**Due FIXME**
+**Due Fri Feb 1, 5:00 PM**
 
-**100 points total + 20 extra credit** 
+**100 points total** 
 
 In your second programming assignment, you will use Java to implement the erver component of a simple web-based chat system.  You will have to spawn threads to handle incoming requests in parallel, use locks to protect access to the shared data structures, and use synhronization operations like conditional wait and notify to block asynchronous queries when a new message has arrived.
 
@@ -68,18 +68,23 @@ By convention, web browsers only permit six simultaneous connections to a single
 
 This assignment can be run locally. But first, make sure that Java (at least version 8) is installed. You can follow instructions here: https://www.java.com/en/download/. 
 
-Now, to compile your code, run javac with a list of all source files. One way is:  
-    
-    find . -name '*.java' -print0 | xargs -0 javac
+In the `src` directory, we've provided you a Makefile. Simply type `make` in your terminal to compile the 2 Java files (both __ChatState__ and __ChatServer__). 
 
 To run the chat server, invoke __java__ with the base directory in which the compiled code lives (the current directory "." if you just ran `javac`) and the ChatServer class: 
   
     java –cp . ChatServer
     
-By default, running `java –cp . ChatServer` will open a server socket on port 8080. The DNS name localhost is bound by convention to a loopback interface on the local machine, so you can get to the chat page world by navigating a browser to
+By default, running `java –cp . ChatServer` will open a server socket on port 8080. The DNS name localhost is bound by convention to a loopback interface on the local machine, so you can get to the chat page world by navigating a browser to http://localhost:8080/world/	
 
-    http://localhost:8080/world/	
+Only one process at a time may bind a service to a port, so you can only run one chat server instance at a time. If the port is not available, __ChatServer__ will exit immediately with a `java.net.BindException: Address already in use`. This might happen because an older instance is still running. This might also occur because another student on the same machine is working on the assignment! On *nix you can check if the port is already bound with the netstat command. (The exact output format will vary.) 
 
+        > netstat -na | grep -w 8080       
+        tcp6       0      0 :::8080           :::*               LISTEN 
+        
+You can pass an optional parameter to __ChatServer__ to request that it bind to another port:
+
+        java –cp . ChatServer 43210 
+        
 ### Working Remotely Through SSH ###
 
 If you aren’t compiling and running ChatServer locally, then you can use SSH port forwarding to allow your local web browser to connect to a remotely running chat server, despite firewalls. For command line SSH clients, add the parameter `-L 8080:localhost:8080` to the ssh invocation, as in: 
@@ -90,48 +95,7 @@ This instructs SSH to forward all connections made to port 8080 on the local mac
 
 ## Tips on Threading and Synchronization ##
 
-You will be using Java's threading library in this assignment. In the example below, we show you how to create and spawn threads:
-
-    class MyThread extends Thread { 
-        public void run() { 
-            // actual method executed by this thread 
-        } 
-    }
-    
-    Thread thread = new MyThread(); 
-    thread.start();  
-    // thread executes its run() method concurrently 
-    thread.join()
-    
-In order to specificy critical regions, you can use the `synchronized` keyword on a Java object. In Java, every object instantiated has a lock associated with it. If multiple threads need to modify the content of a shared Java object, they can do so safely in the following way:
-
-    // sharedObject is some Java object accessible by many threads
-    synchronized(sharedObject) {   // grab lock
-    
-        // Critical atomic region
-        // Safely access and modify field values of sharedObject 
-        
-    } // release lock
-
-Of course, as is always the case with multithreaded programming, you might run into serious concurrency bugs if you're not being careful. For example, say we have the following program: 
-    
-    //Thread Function 1
-    synchronized(a) {
-        synchronized(b) {
-            // function body
-        }
-    }
-   
-    //Thread Function 2
-    synchronized(b) {
-        synchronized(a) {
-            // function body
-        }
-    }
-     
-and the program spawns the 2 threads. If thread 1 executes `synchronized(a)` and thread 2 executes `synchronized(b)`, then both threads get stuck on the next `synchronized` statement. In other words, they deadlock. 
-
-FIXME (section about monitors, wait, notify)
+Checkout our handout on how to use Java's multithreading mechanisms at https://github.com/stanford-cs149/asst2/blob/master/multithreading_tips.md
 
 ## Grading ##
 
@@ -163,16 +127,15 @@ Additionally, we will manually audit your code to evaluate your use of synchroni
   - Busy-waiting (a.k.a. spin-waiting)
   - Use of Thread.sleep() 
   - Locks held during I/O 
-  - Excessive coarse-grained locking (e.g grabing a global lock on all chat rooms instead of a lock per chat room)
+  - Excessive coarse-grained locking (e.g grabbing a global lock on all chat rooms instead of a lock per chat room)
 
-## Extra Credit ##
-
-FIXME 
 
 ## Hand-In Instructions ## 
 
-FIXME 
+You should submit the complete source code for your working solution, as well as a brief text file named README.txt (maximum 1 page) with your name and SUNet ID and an explanation of how it works and why it is correct. 
+
+To submit your assignment, zip the whole directory in which your assignment resides (which includes the `index.html` page, your README.txt file and the `src` directory with your solution), and submit it on Canvas. 
 
 ## Resources and Notes ##
 
-FIXME
+- Look at our Java multithreading handout
