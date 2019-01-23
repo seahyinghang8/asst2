@@ -81,7 +81,8 @@ In order to fix the problems above, you will need to use Java's `wait/notify` me
         while(True) {
             Data newData = ProduceData();
             synchronized(MyBuffer) {
-                MyBuffer.push(newData);            
+                MyBuffer.push(newData);      
+                // Let consumer thread know that more data is available
                 MyBuffer.notify();
             }
         }
@@ -93,8 +94,13 @@ In order to fix the problems above, you will need to use Java's `wait/notify` me
             Data currentData;
             synchronized(MyBuffer) {
                 while(MyBuffer.isEmpty()) {
+                    //Put consumer thread to sleep since no data is available
+                    
+                    //Note that lock held by MyBuffer is released when wait() is called
                     MyBuffer.wait();
+                    //Lock is reacquired once consumer thread is woken up
                 }
+               //There is data to consume. Retrieve it from linked list
                currentData = MyBuffer.pop();
             } 
             consumeData(currentData);
