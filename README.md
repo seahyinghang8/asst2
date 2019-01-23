@@ -48,8 +48,6 @@ You are permitted to use __ONLY__ the following locking primitives, specifically
 
 - the `synchronized` keywords
 - relevant methods of `java.lang.Object` (i.e. `wait()`, `notify()`, and `notifyAll()`) 
-- `java.util.concurrent.Semaphore` 
-- `java.util.concurrent.locks.Lock` as implemented by `java.util.concurrent.locks.ReentrantLock`
 
 Do *NOT* use any high-level concurrent data structures such as Java’s Concurrent Collections classes, or anything else in `java.util.concurrent` not listed above. 
 
@@ -94,7 +92,7 @@ This instructs SSH to forward all connections made to port 8080 on the local mac
 
 ## Tips on Threading and Synchronization ##
 
-Checkout our handout on how to use Java's multithreading mechanisms at https://github.com/stanford-cs149/asst2/blob/master/multithreading_tips.md
+You will need to learn about basic Java synchronization primitives in this assignment.  To help you get started, we've created a handout (https://github.com/stanford-cs149/asst2/blob/master/multithreading_tips.md) on how to use a few key primitives that you might be interested to use in this assignment: for example, how to create threads, take locks, wait for and notify other threads of events, etc. 
 
 ## Grading ##
 
@@ -135,6 +133,3 @@ You should submit the complete source code for your working solution, as well as
 
 To submit your assignment, zip the whole directory in which your assignment resides (which includes the `index.html` page, your README.txt file and the `src` directory with your solution), and submit it on Canvas. 
 
-## Resources and Notes ##
-
-- Look at our Java multithreading handout
