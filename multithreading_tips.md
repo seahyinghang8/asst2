@@ -70,7 +70,7 @@ In order to fix the problems above, you will need to use Java's `wait/notify` me
  - Same semantics as `notify()`, but wakes up all threads in the wait queue
  
  
- Here's a really simple example with 1 producer and 1 consumer thread: 
+ Here's a simple example with 1 producer and 1 consumer thread: 
  
     LinkedList<Data> MyBuffer;
     
