@@ -76,23 +76,27 @@ In order to fix the problems above, you will need to use Java's `wait/notify` me
     
     // Thread 1
     void producer() {
-        Data newData = ProduceData();
-        synchronized(MyBuffer) {
-            MyBuffer.push(newData);            
-            MyBuffer.notify();
+        while(True) {
+            Data newData = ProduceData();
+            synchronized(MyBuffer) {
+                MyBuffer.push(newData);            
+                MyBuffer.notify();
+            }
         }
     }
         
     // Thread 2
     void consumer() {
-        Data currentData;
-        synchronized(MyBuffer) {
-            while(MyBuffer.isEmpty()) {
-                MyBuffer.wait();
-            }
-           currentData = MyBuffer.pop();
-        } 
-        consumeData(currentData);
+        while(True) {
+            Data currentData;
+            synchronized(MyBuffer) {
+                while(MyBuffer.isEmpty()) {
+                    MyBuffer.wait();
+                }
+               currentData = MyBuffer.pop();
+            } 
+            consumeData(currentData);
+        }
     }
       
 You're going to find these functions really useful for implementing your thread pool!
