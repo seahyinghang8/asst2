@@ -50,7 +50,7 @@ will likely arise:
   2. Consumer threads are pulling data from an empty buffer
   
 
-In order to resolve the problems above, you will need to use Java's `wait/notify` mechanism (also known as monitors). We provide a description for each
+In order to fix the problems above, you will need to use Java's `wait/notify` mechanism (also known as monitors). We provide a description for each
   of the functions that you will use in the assignment: 
   
 1. `wait()`:
