@@ -69,5 +69,31 @@ In order to fix the problems above, you will need to use Java's `wait/notify` me
 3. `notifyAll()`:
  - Same semantics as `notify()`, but wakes up all threads in the wait queue
  
-You're going to find these functions really useful for implementing your threadpool!
+ 
+ Here's a really simple example with 1 producer and 1 consumer thread: 
+ 
+    LinkedList<Data> MyBuffer;
+    
+    // Thread 1
+    void producer() {
+        Data newData = ProduceData();
+        synchronized(MyBuffer) {
+            MyBuffer.push(newData);            
+            MyBuffer.notify();
+        }
+    }
+        
+    // Thread 2
+    void consumer() {
+        Data currentData;
+        synchronized(MyBuffer) {
+            while(MyBuffer.isEmpty()) {
+                MyBuffer.wait();
+            }
+           currentData = MyBuffer.pop();
+        } 
+        consumeData(currentData);
+    }
+      
+You're going to find these functions really useful for implementing your thread pool!
 
