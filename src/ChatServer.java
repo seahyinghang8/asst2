@@ -11,7 +11,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,13 +27,14 @@ public class ChatServer {
     private static final String DEFAULT_ROOM = "DEFAULT";
 
     private static final Pattern PAGE_REQUEST
-        = Pattern.compile("GET /([\\p{Alnum}]*/?) HTTP.*");
+            = Pattern.compile("GET /([\\p{Alnum}]*/?) HTTP.*");
     private static final Pattern PULL_REQUEST
-        = Pattern.compile("POST /([\\p{Alnum}]*)/?pull\\?last=([0-9]+) HTTP.*");
+            = Pattern.compile("POST /([\\p{Alnum}]*)/?pull\\?last=([0-9]+) HTTP.*");
     private static final Pattern PUSH_REQUEST
-        = Pattern.compile("POST /([\\p{Alnum}]*)/?push\\?msg=([^ ]*) HTTP.*");
+            = Pattern.compile("POST /([\\p{Alnum}]*)/?push\\?msg=([^ ]*) HTTP.*");
 
     private static final String CHAT_HTML;
+
     static {
         try {
             CHAT_HTML = getFileAsString("../index.html");
@@ -41,8 +44,10 @@ public class ChatServer {
     }
 
     private final int port;
-    private final Map<String,ChatState> stateByName
-        = new HashMap<String,ChatState>();
+    private final Map<String, ChatState> stateByName
+            = new HashMap<String, ChatState>();
+
+    public final Queue<ChatTask> tasks = new LinkedList<>();
 
     /**
      * Constructs a new {@link ChatServer} that will service requests
@@ -55,86 +60,54 @@ public class ChatServer {
 
     /**
      * Starts the server. You want to add any multithreading server
-     * startup code here.  
+     * startup code here.
      */
     public void runForever() throws IOException {
-        @SuppressWarnings("resource")
-	final ServerSocket server = new ServerSocket(port);
+        @SuppressWarnings("resource") final ServerSocket server = new ServerSocket(port);
+        for (int i = 0; i < 7; i++) {
+            ChatThread thread = new ChatThread(this);
+        }
         while (true) {
             final Socket connection = server.accept();
 
             handle(connection);
         }
     }
-    
+
     private static String replaceEmptyWithDefaultRoom(final String room) {
-    	if (room.isEmpty()) {
-    		return DEFAULT_ROOM;
-    	}
-    	return room;
+        if (room.isEmpty()) {
+            return DEFAULT_ROOM;
+        }
+        return room;
     }
 
     /**
      * Handles a request from the client. This method already parses HTTP
-     * requests and calls the corresponding ChatState methods for you. 
+     * requests and calls the corresponding ChatState methods for you.
      */
     private void handle(final Socket connection) throws IOException {
-        try {
-            final BufferedReader xi
+        final BufferedReader xi
                 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            final OutputStream xo = new BufferedOutputStream(connection.getOutputStream());
+        final OutputStream xo = new BufferedOutputStream(connection.getOutputStream());
 
-            final String request = xi.readLine();
-            System.out.println("Got a request from a chat client for " + Thread.currentThread() + ": " + request);
+        final String request = xi.readLine();
 
-            Matcher m;
-            if (request == null) {
-                sendResponse(xo, NOT_FOUND, TEXT, "Empty request.");
-            } else if (PAGE_REQUEST.matcher(request).matches()) {
-                sendResponse(xo, OK, HTML, CHAT_HTML);
-            } else if ((m = PULL_REQUEST.matcher(request)).matches()) {
-                String room = replaceEmptyWithDefaultRoom(m.group(1));
-                final long last = Long.valueOf(m.group(2));
-                sendResponse(xo, OK, TEXT, getState(room).recentMessages(last));
-            } else if ((m = PUSH_REQUEST.matcher(request)).matches()) {
-                String room = replaceEmptyWithDefaultRoom(m.group(1));
-                final String msg = m.group(2);
-                getState(room).addMessage(msg);
-                sendResponse(xo, OK, TEXT, "ack");
-            } else {
-                sendResponse(xo, NOT_FOUND, TEXT, "Malformed request.");
-            }
-        } finally {
-        	connection.close();
+        synchronized (tasks) {
+            System.out.println(request);
+            tasks.add(new ChatTask(xo, connection, request));
+            tasks.notify();
         }
-    }
-    
-    /**
-     * Writes a minimal but valid HTTP response to
-     * <code>output</code>.
-     */
-    private static void sendResponse(final OutputStream xo,
-                                     final String status,
-                                     final String contentType,
-                                     final String content) throws IOException {
-        final byte[] data = content.getBytes(utf8);
-        final String headers =
-            "HTTP/1.0 " + status + "\r\n" +
-            "Content-Type: " + contentType + "; charset=utf-8\r\n" +
-            "Content-Length: " + data.length + "\r\n\r\n";
-
-        xo.write(headers.getBytes(utf8));
-        xo.write(data);
-        xo.flush();
-
-        System.out.println(Thread.currentThread() + ": replied with " + data.length + " bytes");
+        System.out.println("Main is out!");
     }
 
-    private ChatState getState(final String room) {
-        ChatState state = stateByName.get(room);
-        if (state == null) {
-            state = new ChatState(room);
-            stateByName.put(room, state);
+    public ChatState getState(final String room) {
+        ChatState state;
+        synchronized (stateByName) {
+            state = stateByName.get(room);
+            if (state == null) {
+                state = new ChatState(room);
+                stateByName.put(room, state);
+            }
         }
         return state;
     }
@@ -144,9 +117,9 @@ public class ChatServer {
      * then returns the string.
      */
     private static String getFileAsString(final String path)
-        throws IOException {
-    	byte[] fileBytes = Files.readAllBytes(Paths.get(path));
-    	return new String(fileBytes, utf8);
+            throws IOException {
+        byte[] fileBytes = Files.readAllBytes(Paths.get(path));
+        return new String(fileBytes, utf8);
     }
 
     /**

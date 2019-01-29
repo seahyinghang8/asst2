@@ -34,10 +34,13 @@ public class ChatState {
      * messages.
      */
     public void addMessage(final String msg) {
-        history.addLast(msg);
-        ++lastID;
-        if (history.size() > MAX_HISTORY) {
-            history.removeFirst();
+        synchronized (history) {
+            history.addLast(msg);
+            ++lastID;
+            if (history.size() > MAX_HISTORY) {
+                history.removeFirst();
+            }
+            notify();
         }
     }
 
@@ -71,7 +74,7 @@ public class ChatState {
         if (count == 0) {
             // TODO: Do not use Thread.sleep() here!
             try {
-                Thread.sleep(15000);
+                wait();
             } catch (final InterruptedException xx) {
                 throw new Error("unexpected", xx);
             }
