@@ -66,6 +66,7 @@ public class ChatServer {
         @SuppressWarnings("resource") final ServerSocket server = new ServerSocket(port);
         for (int i = 0; i < 7; i++) {
             ChatThread thread = new ChatThread(this);
+            thread.start();
         }
         while (true) {
             final Socket connection = server.accept();
@@ -93,11 +94,9 @@ public class ChatServer {
         final String request = xi.readLine();
 
         synchronized (tasks) {
-            System.out.println(request);
             tasks.add(new ChatTask(xo, connection, request));
             tasks.notify();
         }
-        System.out.println("Main is out!");
     }
 
     public ChatState getState(final String room) {

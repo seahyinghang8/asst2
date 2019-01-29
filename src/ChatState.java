@@ -40,7 +40,7 @@ public class ChatState {
             if (history.size() > MAX_HISTORY) {
                 history.removeFirst();
             }
-            notify();
+            history.notify();
         }
     }
 
@@ -71,24 +71,26 @@ public class ChatState {
      */
     public String recentMessages(long mostRecentSeenID) {
         int count = messagesToSend(mostRecentSeenID);
-        if (count == 0) {
-            // TODO: Do not use Thread.sleep() here!
-            try {
-                wait();
-            } catch (final InterruptedException xx) {
-                throw new Error("unexpected", xx);
-            }
-            count = messagesToSend(mostRecentSeenID);
-        }
-
         final StringBuffer buf = new StringBuffer();
+        synchronized (history) {
+            if (count == 0) {
+                // TODO: Do not use Thread.sleep() here!
+                try {
+                    history.wait();
+                } catch (final InterruptedException xx) {
+                    throw new Error("unexpected", xx);
+                }
+                count = messagesToSend(mostRecentSeenID);
+            }
 
-        // If count == 1, then id should be lastID on the first
-        // iteration.
-        long id = lastID - count + 1;
-        for (String msg: history.subList(history.size() - count, history.size())) {
-            buf.append(id).append(": ").append(msg).append('\n');
-            ++id;
+
+            // If count == 1, then id should be lastID on the first
+            // iteration.
+            long id = lastID - count + 1;
+            for (String msg : history.subList(history.size() - count, history.size())) {
+                buf.append(id).append(": ").append(msg).append('\n');
+                ++id;
+            }
         }
         return buf.toString();
     }
