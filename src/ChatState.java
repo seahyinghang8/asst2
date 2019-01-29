@@ -40,7 +40,7 @@ public class ChatState {
             if (history.size() > MAX_HISTORY) {
                 history.removeFirst();
             }
-            history.notify();
+            history.notifyAll();
         }
     }
 
