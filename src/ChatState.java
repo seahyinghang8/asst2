@@ -34,12 +34,18 @@ public class ChatState {
      * messages.
      */
     public void addMessage(final String msg) {
+        // access to the chat history of a single room has to be locked
+        // to prevent any other threads from adding new messages / deleting messages
         synchronized (history) {
             history.addLast(msg);
+            // since lastID is only accessed when history is being accessed,
+            // it can be updated without the need for a lock
             ++lastID;
             if (history.size() > MAX_HISTORY) {
                 history.removeFirst();
             }
+            // wake up all the other threads waiting to update their clients
+            // with the most recent messages
             history.notifyAll();
         }
     }
@@ -70,12 +76,15 @@ public class ChatState {
      * wait even after messages have been posted.
      */
     public String recentMessages(long mostRecentSeenID) {
-        int count = messagesToSend(mostRecentSeenID);
         final StringBuffer buf = new StringBuffer();
+        // First, acquire a lock to history (shared object among threads)
         synchronized (history) {
+            // messagesToSend will inspect the lastID, which should only
+            // be updated once the history lock is aquired
+            int count = messagesToSend(mostRecentSeenID);
             if (count == 0) {
-                // TODO: Do not use Thread.sleep() here!
                 try {
+                    // wait till a new message is ready to be updated
                     history.wait();
                 } catch (final InterruptedException xx) {
                     throw new Error("unexpected", xx);

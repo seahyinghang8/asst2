@@ -20,33 +20,11 @@ import java.util.regex.Pattern;
 public class ChatServer {
     private static final Charset utf8 = Charset.forName("UTF-8");
 
-    private static final String OK = "200 OK";
-    private static final String NOT_FOUND = "404 NOT FOUND";
-    private static final String HTML = "text/html";
-    private static final String TEXT = "text/plain";
-    private static final String DEFAULT_ROOM = "DEFAULT";
-
-    private static final Pattern PAGE_REQUEST
-            = Pattern.compile("GET /([\\p{Alnum}]*/?) HTTP.*");
-    private static final Pattern PULL_REQUEST
-            = Pattern.compile("POST /([\\p{Alnum}]*)/?pull\\?last=([0-9]+) HTTP.*");
-    private static final Pattern PUSH_REQUEST
-            = Pattern.compile("POST /([\\p{Alnum}]*)/?push\\?msg=([^ ]*) HTTP.*");
-
-    private static final String CHAT_HTML;
-
-    static {
-        try {
-            CHAT_HTML = getFileAsString("../index.html");
-        } catch (final IOException xx) {
-            throw new Error("unable to start server", xx);
-        }
-    }
-
     private final int port;
     private final Map<String, ChatState> stateByName
             = new HashMap<String, ChatState>();
 
+    // added a queue of tasks for the threads to handle
     public final Queue<ChatTask> tasks = new LinkedList<>();
 
     /**
@@ -64,63 +42,46 @@ public class ChatServer {
      */
     public void runForever() throws IOException {
         @SuppressWarnings("resource") final ServerSocket server = new ServerSocket(port);
+        // initializes 8 chatting threads that will handle the requests
         for (int i = 0; i < 7; i++) {
             ChatThread thread = new ChatThread(this);
             thread.start();
         }
         while (true) {
+            // accept any incoming connections
             final Socket connection = server.accept();
-
             handle(connection);
         }
     }
 
-    private static String replaceEmptyWithDefaultRoom(final String room) {
-        if (room.isEmpty()) {
-            return DEFAULT_ROOM;
-        }
-        return room;
-    }
-
     /**
      * Handles a request from the client. This method already parses HTTP
-     * requests and calls the corresponding ChatState methods for you.
+     * requests and passses the work to a chatting thread.
      */
     private void handle(final Socket connection) throws IOException {
+        // parses the connection
         final BufferedReader xi
                 = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         final OutputStream xo = new BufferedOutputStream(connection.getOutputStream());
-
         final String request = xi.readLine();
-
+        // lock the task queue before adding a new element task into the queue
         synchronized (tasks) {
             tasks.add(new ChatTask(xo, connection, request));
+            // notify 1 waiting thread (if any)
+            // which will then wake up and take the work from the queue
             tasks.notify();
         }
     }
 
     public ChatState getState(final String room) {
-        ChatState state;
-        synchronized (stateByName) {
-            state = stateByName.get(room);
-            if (state == null) {
-                state = new ChatState(room);
-                stateByName.put(room, state);
-            }
+        ChatState state = stateByName.get(room);
+        if (state == null) {
+            state = new ChatState(room);
+            stateByName.put(room, state);
         }
         return state;
     }
-
-    /**
-     * Reads the resource with the specified path as a string, and
-     * then returns the string.
-     */
-    private static String getFileAsString(final String path)
-            throws IOException {
-        byte[] fileBytes = Files.readAllBytes(Paths.get(path));
-        return new String(fileBytes, utf8);
-    }
-
+    
     /**
      * Runs a chat server, with a default port of 8080.
      */

@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// The different types of tasks
 enum Tasks {
     NULL, PAGE, PULL, PUSH, EXCEPTION
 }
@@ -59,15 +60,20 @@ public class ChatThread extends Thread {
         System.out.println(currentThread() + ": replied with " + data.length + " bytes");
     }
 
+    // initializing the chat thread which extends from the thread class
     public ChatThread(ChatServer server) {
         super();
         this.server = server;
     }
 
     public void run() {
+        // threads that are created will loop indefinitely
         while (true) {
+            // create a local task variable
             ChatTask task;
+            // get exclusive access to the task queue
             synchronized (this.server.tasks) {
+                // wait till the task queue is not empty
                 while (this.server.tasks.isEmpty()) {
                     try {
                         this.server.tasks.wait();
@@ -76,10 +82,12 @@ public class ChatThread extends Thread {
                         e.printStackTrace();
                     }
                 }
+                // dequeue the task
                 task = server.tasks.remove();
                 System.out.println(task.request);
             }
 
+            // process the task
             try {
                 System.out.println("Got a request from a chat client for " + Thread.currentThread() + ": " + task.request);
 

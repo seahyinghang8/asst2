@@ -4,7 +4,7 @@
 
 **100 points total** 
 
-In your second programming assignment, you will use Java to implement the erver component of a simple web-based chat system.  You will have to spawn threads to handle incoming requests in parallel, use locks to protect access to the shared data structures, and use synhronization operations like conditional wait and notify to block asynchronous queries when a new message has arrived.
+In your second programming assignment, you will use Java to implement the server component of a simple web-based chat system.  You will have to spawn threads to handle incoming requests in parallel, use locks to protect access to the shared data structures, and use synhronization operations like conditional wait and notify to block asynchronous queries when a new message has arrived.
 
 
 ## Overview ##
