@@ -78,7 +78,6 @@ public class ChatThread extends Thread {
                     try {
                         this.server.tasks.wait();
                     } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
                         e.printStackTrace();
                     }
                 }

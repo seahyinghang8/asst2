@@ -80,12 +80,12 @@ public class ChatState {
         // First, acquire a lock to history (shared object among threads)
         synchronized (history) {
             // messagesToSend will inspect the lastID, which should only
-            // be updated once the history lock is aquired
+            // be updated once the history lock is acquired
             int count = messagesToSend(mostRecentSeenID);
             if (count == 0) {
                 try {
                     // wait till a new message is ready to be updated
-                    history.wait();
+                    history.wait(15000);
                 } catch (final InterruptedException xx) {
                     throw new Error("unexpected", xx);
                 }

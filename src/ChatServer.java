@@ -43,7 +43,8 @@ public class ChatServer {
     public void runForever() throws IOException {
         @SuppressWarnings("resource") final ServerSocket server = new ServerSocket(port);
         // initializes 8 chatting threads that will handle the requests
-        for (int i = 0; i < 7; i++) {
+        // since we already have 1 main thread
+        for (int i = 0; i < 8; i++) {
             ChatThread thread = new ChatThread(this);
             thread.start();
         }
@@ -66,6 +67,7 @@ public class ChatServer {
         final String request = xi.readLine();
         // lock the task queue before adding a new element task into the queue
         synchronized (tasks) {
+            System.out.println(request);
             tasks.add(new ChatTask(xo, connection, request));
             // notify 1 waiting thread (if any)
             // which will then wake up and take the work from the queue
