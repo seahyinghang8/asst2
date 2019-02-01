@@ -43,7 +43,7 @@ public class ChatServer {
     public void runForever() throws IOException {
         @SuppressWarnings("resource") final ServerSocket server = new ServerSocket(port);
         // initializes 8 chatting threads that will handle the requests
-        // since we already have 1 main thread
+        // does not include the 1 main thread that we started with
         for (int i = 0; i < 8; i++) {
             ChatThread thread = new ChatThread(this);
             thread.start();
