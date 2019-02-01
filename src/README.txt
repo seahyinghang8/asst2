@@ -13,4 +13,4 @@ ChatState was modified to be able to handle synchronization. The chat history fo
 
 ChatServer was modified and to just start up the server at port 8080 and handle any incoming socket connections. Once the connection is established and the request is parsed, ChatServer will create an instance of ChatTask and add it to the task queue. It will then notify any idle ChatThreads to handle the task. If there are no idle threads, the tasks will stay in the queue until some thread becomes free and dequeue the task.
 
-More details of the implementaion can be seen in the comments in the code.
+More details of the implementation can be seen in the comments in the code.
